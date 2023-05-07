@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dscatalog.dto.CategoryDTO;
+import com.dscatalog.dto.NewCategoryDTO;
 import com.dscatalog.entities.Category;
 import com.dscatalog.repositories.CategoryRepository;
 import com.dscatalog.services.exceptions.EntityNotFoundException;
@@ -31,5 +32,16 @@ public class CategoryService {
     Category category = obj.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
 
     return new CategoryDTO(category);
+  }
+
+  @Transactional
+  public CategoryDTO insert(NewCategoryDTO request) {
+    var category = new Category();
+
+    category.setName(request.name());
+
+    var newCategory = repository.save(category);
+
+    return new CategoryDTO(newCategory);
   }
 }
