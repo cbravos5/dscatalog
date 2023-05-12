@@ -11,7 +11,9 @@ import com.dscatalog.dto.CategoryDTO;
 import com.dscatalog.dto.NewCategoryDTO;
 import com.dscatalog.entities.Category;
 import com.dscatalog.repositories.CategoryRepository;
-import com.dscatalog.services.exceptions.EntityNotFoundException;
+import com.dscatalog.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CategoryService {
@@ -29,7 +31,7 @@ public class CategoryService {
   public CategoryDTO findById(Long id) {
     Optional<Category> obj = repository.findById(id);
 
-    Category category = obj.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+    Category category = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 
     return new CategoryDTO(category);
   }
@@ -43,5 +45,19 @@ public class CategoryService {
     var newCategory = repository.save(category);
 
     return new CategoryDTO(newCategory);
+  }
+
+  @Transactional
+  public CategoryDTO update(Long id, NewCategoryDTO request) {
+    try {
+      Category category = repository.getReferenceById(id);
+  
+      category.setName(request.name());
+      Category updatedCaregory = repository.save(category);
+  
+      return new CategoryDTO(updatedCaregory);
+    } catch (EntityNotFoundException e) {
+      throw new ResourceNotFoundException("Id not found " + id);
+    }
   }
 }
