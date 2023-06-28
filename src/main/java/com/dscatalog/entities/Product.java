@@ -38,6 +38,8 @@ public class Product {
              inverseJoinColumns = @JoinColumn(name = "category_id"))
   Set<Category> categories = new HashSet<>();
 
+  public Product(){}
+
   public Product(Long id, String name, String description, Double price, String imgUrl, Instant date,
       Set<Category> categories) {
     this.id = id;

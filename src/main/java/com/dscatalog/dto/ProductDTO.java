@@ -3,7 +3,9 @@ package com.dscatalog.dto;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import com.dscatalog.entities.Category;
 import com.dscatalog.entities.Product;
 
 public record ProductDTO(
@@ -33,6 +35,10 @@ public record ProductDTO(
         entity.getPrice(),
         entity.getImgUrl(),
         entity.getDate(), new ArrayList<>());
-    entity.getCategories().forEach(c -> categories.add(new CategoryDTO(c)));
+  }
+
+  public ProductDTO(Product entity, Set<Category> categories) {
+    this(entity);
+    categories.forEach(c -> this.categories.add(new CategoryDTO(c)));
   }
 }
