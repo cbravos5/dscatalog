@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.dscatalog.entities.Product;
+import com.dscatalog.tests.Factory;
 
 @DataJpaTest
 public class ProductRepositoryTests {
@@ -25,5 +26,16 @@ public class ProductRepositoryTests {
     Optional<Product> result = _repository.findById(existingId);
 
     Assertions.assertFalse(result.isPresent());
+  }
+
+  @Test
+  public void saveShouldPersistWithAutoIncrementWhenIdIsNull() {
+    Product product = Factory.createProduct();
+
+    product.setId(null);
+
+    product = _repository.save(product);
+
+    Assertions.assertNotNull(product.getId());
   }
 }
