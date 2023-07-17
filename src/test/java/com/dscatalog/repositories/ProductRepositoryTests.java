@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.dscatalog.entities.Product;
 import com.dscatalog.tests.Factory;
@@ -37,5 +36,23 @@ public class ProductRepositoryTests {
     product = _repository.save(product);
 
     Assertions.assertNotNull(product.getId());
+  }
+
+  @Test
+  public void findByIdShouldReturnProductWhenIdExists() {
+    Long id = 1L; 
+
+    Optional<Product> product = _repository.findById(id);
+
+    Assertions.assertTrue(product.isPresent());
+  }
+
+  @Test
+  public void findByIdShouldReturnEmptyWhenIdNotExists() {
+    Long id = 9999L; 
+
+    Optional<Product> product = _repository.findById(id);
+
+    Assertions.assertFalse(product.isPresent());
   }
 }
